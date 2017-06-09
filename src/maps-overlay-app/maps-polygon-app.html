@@ -1,0 +1,127 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/google-map/google-map-elements.html">
+
+<dom-module id="maps-polygon-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      google-map {
+        width: 100%;
+        height: 500px;
+      }
+    </style>
+    <h2>Polygon Overlay</h2>
+
+    <template is="dom-repeat" items="[[locations]]" as="location">
+      <div>
+        [[location.address]]
+        <small>
+          ([[location.lng]], [[location.lat]])
+        </small>
+      </div>
+    </template>
+
+    <!--
+"lat": 52.132633,
+"lng": 5.291265999999999-->
+
+    <google-map latitude="37.77493" longitude="-122.41942">
+      <google-map-poly closed fill-color="blue" fill-opacity=".5">
+        <google-map-point latitude="36.77491" longitude="-121.41941"></google-map-point>
+        <google-map-point latitude="38.77492x" longitude="-122.41942"></google-map-point>
+        <google-map-point latitude="36.77493" longitude="-123.41943"></google-map-point>
+      </google-map-poly>
+    </google-map>
+
+    <!--<google-map id="map" api-key="[[_key]]"latitude="37.77493" longitude="-122.41942">-->
+    <!--&lt;!&ndash;<google-map id="map" api-key="[[_key]]" latitude="52.132633" longitude="5.291265999999999">&ndash;&gt;-->
+    <!--<google-map-marker-->
+    <!--latitude="52.132633"-->
+    <!--longitude="5.291265999999999">-->
+    <!--</google-map-marker>-->
+
+    <!--<google-map-poly closed fill-color="blue" fill-opacity=".5">-->
+    <!--<google-map-point latitude="36.77493" longitude="-121.41942"></google-map-point>-->
+    <!--<google-map-point latitude="38.77493" longitude="-122.41942"></google-map-point>-->
+    <!--<google-map-point latitude="36.77493" longitude="-123.41942"></google-map-point>-->
+    <!--</google-map-poly>-->
+
+    <!--<google-map-poly closed fill-color="orange" fill-opacity="0.5">-->
+    <!--&lt;!&ndash;<template is="dom-repeat" items="[[locations]]" as="location">&ndash;&gt;-->
+    <!--&lt;!&ndash;<google-map-point&ndash;&gt;-->
+    <!--&lt;!&ndash;latitude="[[location.lat]]"&ndash;&gt;-->
+    <!--&lt;!&ndash;longitude="[[location.lng]]">&ndash;&gt;-->
+    <!--&lt;!&ndash;</google-map-point>&ndash;&gt;-->
+    <!--&lt;!&ndash;</template>&ndash;&gt;-->
+    <!--</google-map-poly>-->
+    <!--</google-map>-->
+
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class MapsPolygonApp extends Polymer.Element {
+      static get is() {
+        return 'maps-polygon-app';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * Use this key only for the Accountability Hackathon 2017
+           */
+          _key: {
+            type: String,
+            value: 'AIzaSyBnCbGVdUJ-T_mdP9QWHqQFByxG8sZJQP8'
+          },
+          locations: {
+            type: Array,
+            value: function () {
+              return [
+                {
+                  address: '1065 CH',
+                  lat: 52.3589661,
+                  lng: 4.823281
+                },
+                {
+                  address: '2511 CL',
+                  lat: 52.0786467,
+                  lng: 4.3144497
+                },
+                {
+                  address: '3824 DK',
+                  lat: 52.1947546,
+                  lng: 5.3777556
+                },
+                {
+                  address: '1223 GK',
+                  lat: 52.2308983,
+                  lng: 5.1991128
+                },
+                {
+                  address: '1316 LG',
+                  lat: 52.3850857,
+                  lng: 5.2258091
+                },
+                {
+                  address: '1087 MN',
+                  lat: 52.347334,
+                  lng: 5.0077305
+                }
+              ];
+            }
+          }
+        };
+      }
+    }
+
+    window.customElements.define(MapsPolygonApp.is, MapsPolygonApp);
+  </script>
+</dom-module>

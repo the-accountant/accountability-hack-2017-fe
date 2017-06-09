@@ -1,0 +1,7 @@
+{
+  "name": "maps-overlay",
+  "short_name": "maps-overlay",
+  "description": "This is a proof of concept of a Google Maps element with Overlays.",
+  "start_url": "/",
+  "display": "standalone"
+}
