@@ -144,7 +144,7 @@ function fetchSchools() {
     }
   };
 }
-fetchSchools();
+//fetchSchools();
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -197,6 +197,7 @@ function addMarker(item) {
     }
   };
   var createParagraph = item => createElement(item, 'p');
+  var createTableRow = item => createElement(item, 'tr');
   var createHeader = item => createElement(item, 'h1');
 
 
@@ -210,32 +211,36 @@ function addMarker(item) {
     infoContent += '<p>' + item.address.streetName + ' ' + item.address.streetNr + '<br/>' + item.address.zipcode + '<br/>' + item.address.city;
   }
 
-  infoContent += createParagraph('Inkomen € ' + item.totalIncome);
+  infoContent += "<table>";
   if(item.ratings.classSize) {
-    infoContent += createParagraph('Klassegrootte ' + item.ratings.classSize);
+    infoContent += createTableRow('<td>Inkomen</td><td>€  ' + item.totalIncome+'</td>');
   }
 
+  if(item.ratings.classSize) {
+    infoContent += createTableRow('<td>Klassegrootte </td><td>' + item.ratings.classSize+'</td>');
+  }
 
   if(item.ratings.incomePerStudent) {
-    infoContent += createParagraph('Klassegrootte ' + item.ratings.incomePerStudent);
+    infoContent += createTableRow('<td>Inkomen per leerling </td><td>' + item.ratings.incomePerStudent+'</td>');
   }
 
   if(item.ratings.nonPersonelCostsPerStudent) {
-    infoContent += createParagraph('Klassegrootte ' + item.ratings.nonPersonelCostsPerStudent);
+    infoContent += createTableRow('<td>Klassegrootte </td><td>' + item.ratings.nonPersonelCostsPerStudent+'</td>');
   }
 
   if(item.ratings.fteBoardPerFteTeacher) {
-    infoContent += createParagraph('Directie tegenpover leraren ' + item.ratings.fteBoardPerFteTeacher);
+    infoContent += createTableRow('<td>Directie/leraren </td><td>' + item.ratings.fteBoardPerFteTeacher+'</td>');
   }
 
   if(item.ratings.costsBoardPerCostsPersonel) {
-    infoContent += createParagraph('Kosten Directie tegenover leraren ' + item.ratings.costsBoardPerCostsPersonel);
+    infoContent += createTableRow('<td>Kosten Directie/leraren </td><td>' + item.ratings.costsBoardPerCostsPersonel+'</td>');
   }
 
   if(item.ratings.citoPerClassSize) {
-    infoContent += createParagraph('Cite per Klasgrootte ' + item.ratings.citoPerClassSize);
+    infoContent += createTableRow('<td>Cito per Klasgrootte </td><td>' + item.ratings.citoPerClassSize+'</td>');
   }
 
+  infoContent += "</table>";
   var infowindow = new google.maps.InfoWindow({
     content: infoContent
   });
