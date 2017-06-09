@@ -1,21 +1,39 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Heatmaps</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="stylesheet" type="text/css" href="googlemap.css">
+</head>
 
-    <title>maps-overlay</title>
-    <meta name="description" content="maps-overlay description">
+<body>
+<div id="floating-panel">
+  <label>Heatmap<input type="checkbox" checked="true" onclick="toggleHeatmap()"></label><br>
+  <label>Markers<input type="checkbox" checked="true" onclick="toggleMarkers(this)"></label>
+</div>
+<div id="map"></div>
+<div id="info">
 
-    <!-- See https://goo.gl/OOhYW5 -->
-    <link rel="manifest" href="/manifest.json">
+  <div class="margins">
+  <h1>App Name</h1>
 
-    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <p>Intro tekst</p>
 
-    <link rel="import" href="/src/maps-overlay-app/maps-overlay-app.html">
-    <link rel="import" href="/src/maps-overlay-app/maps-polygon-app.html">
-  </head>
-  <body>
-    <maps-polygon-app></maps-polygon-app>
-  </body>
+  <p>
+    The Accountant</p>
+
+    <small>
+      Effi Bennikers<br/>
+      Jess Brand<br/>
+      Erik Manshande<br/>
+      Han Markslag<br/>
+      Frank Wijmans<br/>
+    </small></div>
+</div>
+<script src="googlemap.js"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnCbGVdUJ-T_mdP9QWHqQFByxG8sZJQP8&libraries=visualization&callback=initMap">
+</script>
+</body>
 </html>
