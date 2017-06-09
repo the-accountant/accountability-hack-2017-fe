@@ -11,9 +11,12 @@ processData([
     id: '1',
     brin: '676576',
     bevoegdGezag: 0,
-    name: 'Mooie school',
+    name: 'Frank Wijmans',
     address: {
-      zipcode: '1065 CH'
+      streetName: 'Comeniusstraat',
+      streetNr: '809/3',
+      zipcode: '1065 CH',
+      city: 'Amsterdam'
     },
     geo: {
       latitude: 52.3589661,
@@ -28,9 +31,23 @@ processData([
     bekostigingPersoneel: 1.533,
     bekostigingDirectie: 1.533,
     bekostigingOverig: 1.533,
+    totalMaterialInstantHolding: 234.34,
+    ratings: {
+      classSize: 2,
+      incomePerStudent: 769787,
+      nonPersonelCostsPerStudent: 8765876,
+      fteBoardPerFteTeacher: 3,
+      costsBoardPerCostsPersonel: 1,
+      citoPerClassSize: 5
+    }
   },
   {
-    address: '2511 CL',
+    address: {
+      zipcode: '2511 CL',
+      streetNr: '',
+      streetName: '',
+      city: ''
+    },
     geo: {
       latitude: 52.0786467,
       longitude: 4.3144497
@@ -38,7 +55,12 @@ processData([
   }
   ,
   {
-    address: '3824 DK',
+    address: {
+      zipcode: '3824 DK',
+      streetNr: '',
+      streetName: '',
+      city: ''
+    },
     geo: {
       latitude: 52.1947546,
       longitude: 5.3777556
@@ -46,7 +68,12 @@ processData([
   }
   ,
   {
-    address: '1223 GK',
+    address: {
+      zipcode: '1223 GK',
+      streetNr: '',
+      streetName: '',
+      city: ''
+    },
     geo: {
       latitude: 52.2308983,
       longitude: 5.1991128
@@ -54,7 +81,12 @@ processData([
   }
   ,
   {
-    address: '1316 LG',
+    address: {
+      zipcode: '1316 LG',
+      streetNr: '',
+      streetName: '',
+      city: ''
+    },
     geo: {
       latitude: 52.3850857,
       longitude: 5.2258091
@@ -62,7 +94,12 @@ processData([
   }
   ,
   {
-    address: '1087 MN',
+    address: {
+      zipcode: '1087 MN',
+      streetNr: '',
+      streetName: '',
+      city: ''
+    },
     geo: {
       latitude: 52.347334,
       longitude: 5.0077305
@@ -71,11 +108,21 @@ processData([
 ]);
 
 function processData(rawData, callback) {
-  var newData = rawData.filter(item => {
-    return item.geo && item.geo != null
-  });
-  console.log(newData);
+  var newData = rawData
+      .filter(item => {
+        return item.geo && item.geo != null
+      }).map(item => {
+
+        item.totalIncome = 0;
+        if (item.bekostigingPersoneel) item.totalIncome += item.bekostigingPersoneel;
+        if (item.bekostigingDirectie) item.totalIncome += item.bekostigingDirectie;
+        if (item.bekostigingOverig) item.totalIncome += item.bekostigingOverig;
+        if (item.totalMaterialInstantHolding) item.totalIncome += item.totalMaterialInstantHolding;
+
+        return item;
+      });
   data = newData;
+  console.log(data);
   if (callback) {
     callback();
   }
@@ -83,7 +130,7 @@ function processData(rawData, callback) {
 
 
 var url = 'http://818e3c4a.ngrok.io';
-var schoolResource = url + '/schools?start=0&size=10';
+var schoolResource = url + '/schools?start=1000&size=5000';
 
 function fetchSchools() {
   var xhr = new XMLHttpRequest();
@@ -97,7 +144,7 @@ function fetchSchools() {
     }
   };
 }
-//fetchSchools();
+fetchSchools();
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -111,7 +158,10 @@ function initMap() {
     map: map
   });
 
+
   addMarkers(data);
+  clearMarkers(document.getElementById('markerCheckbox'));
+
 }
 
 function addMarkers(markerData) {
@@ -133,32 +183,48 @@ function toggleMarkers(e) {
   } else {
     clearMarkers();
   }
-  //heatmap.setMap(heatmap.getMap() ? null : map);
 }
 
 // Adds a marker to the map and push to the array.
 function addMarker(item) {
 
+  var createElement = (value, element) => {
+
+    if (value && value != undefined) {
+      return '<' + element + '>' + value + '</' + element + '>';
+    } else {
+      return '';
+    }
+  };
+  var createParagraph = item => createElement(item, 'p');
+  var createHeader = item => createElement(item, 'h1');
+
+
   var infoContent = '';
 
+  infoContent += createHeader(item.name);
+  if (item.brin) {
+    infoContent += '<small> BRIN: ' + item.brin + '  </small>';
+  }
   if (item.address) {
-    infoContent += '<h1>' + item.address + '</h1>';
+    infoContent += '<p>' + item.address.streetName + ' ' + item.address.streetNr + '<br/>' + item.address.zipcode + '<br/>' + item.address.city;
   }
-  if (item.name) {
-    infoContent += '<p>' + item.name + '</p>';
-  }
-  if (item.website) {
-    infoContent += '<a href="' + item.website + '">' + item.website + '</a>';
-  }
+
+  infoContent += createParagraph('Inkomen € ' + item.totalIncome);
 
   var infowindow = new google.maps.InfoWindow({
     content: infoContent
   });
 
+  var name = 'School';
+  if (item.name) {
+    name = item.name;
+  }
+
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(item.geo.latitude, item.geo.longitude),
     map: map,
-    title: item.address
+    title: name
   });
 
   marker.addListener('click', function () {
@@ -170,13 +236,6 @@ function addMarker(item) {
   });
 
   markers.push(marker);
-
-
-//    var marker = new google.maps.Marker({
-//      position: location,
-//      map: map
-//    });
-//    markers.push(marker);
 }
 
 
@@ -187,14 +246,30 @@ function setMapOnAll(map) {
   }
 }
 
+// Sets the map on all markers in the array.
+function setMapOnMarker(map, marker) {
+  for (var i = 0; i < markers.length; i++) {
+    if (markers[i].title == marker) {
+      markers[i].setMap(map);
+    }
+  }
+}
+
 // Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
+function clearMarkers(checker) {
   setMapOnAll(null);
+  if (checker) {
+    checker.checked = false;
+  }
 }
 
 // Shows any markers currently in the array.
-function showMarkers() {
+function showMarkers(checker) {
   setMapOnAll(map);
+
+  if (checker) {
+    checker.checked = true;
+  }
 }
 
 function changeGradient() {
@@ -219,5 +294,27 @@ function changeGradient() {
 
 // Heatmap data: 500 Points
 function getPoints(pointData) {
-  return pointData.map(item => new google.maps.LatLng(item.geo.latitude, item.geo.longitude));
+  return pointData.map(item => {
+        var weight = 1;
+        if (item.ratings && item.ratings.classSize) {
+          weight = item.ratings.classSize;
+        }
+        return {
+          location: new google.maps.LatLng(item.geo.latitude, item.geo.longitude),
+          weight: weight
+        }
+      }
+  );
+}
+
+function findMarker() {
+  var searchValue = document.getElementById('searchBox').value;
+  data
+      .filter(item => item.name)
+      .map((item) => {
+        if (item.name && item.name.indexOf(searchValue) != -1) {
+          setMapOnMarker(map, item.name);
+        }
+      });
+
 }

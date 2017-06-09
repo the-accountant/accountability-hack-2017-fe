@@ -2,13 +2,6 @@
 echo +------------------------------+
 echo \|Building and deploying project\|
 echo +------------------------------+
-echo
-echo Updating project..
-
-echo - npm
-npm install --silent
-echo - bower
-bower up --silent
 
 echo
 echo Building project..

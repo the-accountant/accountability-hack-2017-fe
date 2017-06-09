@@ -8,13 +8,33 @@ html, body {
 }
 
 * {
-
+    font-family: 'Roboto', 'sans-serif';
     color: white;
+}
+
+input,button {
+    font-size: 14px;
+    border: 1px solid lightgreen;
+    border-radius: 4px;
+    padding: 12px;
+}
+input {
+    color: black;
+    background: white;
+}
+button {
+    color: #90f090;
+    background: white;
 }
 
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
 #map {
+    height: 100%;
+    border-right: 1px solid lightgrey;
+}
+
+#mapWrapper {
     height: 100%;
     width: 60%;
     float: left;
@@ -25,10 +45,12 @@ html, body {
     height: 100%;
     width: 40%;
     overflow: hidden;
-    background-image: url('assets/gradient.jpg') ;
-    background-position: center;
+
+    background: linear-gradient(to bottom right, #90eef0, #90f090); /* Standard syntax */
 }
 
 .margins {
-    margin: 30px;
+    border-left: 1px solid grey;
+    padding: 30px;
+    height:100%;
 }

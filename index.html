@@ -10,26 +10,46 @@
 <body>
 <div id="floating-panel">
   <label>Heatmap<input type="checkbox" checked="true" onclick="toggleHeatmap()"></label><br>
-  <label>Markers<input type="checkbox" checked="true" onclick="toggleMarkers(this)"></label>
+  <label>Markers<input id="markerCheckbox" type="checkbox" checked="" onclick="toggleMarkers(this)"></label>
 </div>
-<div id="map"></div>
+<div id="mapWrapper">
+  <div id="map"></div>
+</div>
 <div id="info">
 
   <div class="margins">
-  <h1>Schoolzicht</h1>
+    <h1>Schoolzicht</h1>
 
-  <p>Intro tekst</p>
+    <h2>Krijg eenvoudig zicht op het onderwijs</h2>
 
-  <p>
-    The Accountant</p>
+    <p>U kunt simpel weg zoeken op uw eigen school.</p>
 
-    <small>
-      Effi Bennikers<br/>
-      Jess Brand<br/>
-      Erik Manshande<br/>
-      Han Markslag<br/>
-      Frank Wijmans<br/>
-    </small></div>
+    <input value="School x" id="searchBox"> <button onclick="findMarker()">Zoek</button>
+
+    <p>Kijk bijvoorbeeld naar de werk druk per school.</p>
+
+    <p>Graag gedaan,</p>
+
+    <p>
+      The Accountants</br>
+      <small>
+        Effi Bennikers<br/>
+        Jesse Brand<br/>
+        Erik Manshande<br/>
+        Han Markslag<br/>
+        Frank Wijmans<br/>
+      </small>
+    </p>
+
+    <button>Klasgrootte</button><br>
+    <button>Leerlingen per groep</button><br>
+    <button>Inkomen per leerling</button><br>
+    <button>Directie tegenover leraren</button><br>
+    <button>Kosten Directie tegenover leraren</button><br>
+    <button>Cito per Klasgrootte</button><br>
+
+
+  </div>
 </div>
 <script src="googlemap.js"></script>
 <script async defer
