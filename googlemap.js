@@ -211,6 +211,30 @@ function addMarker(item) {
   }
 
   infoContent += createParagraph('Inkomen € ' + item.totalIncome);
+  if(item.ratings.classSize) {
+    infoContent += createParagraph('Klassegrootte ' + item.ratings.classSize);
+  }
+
+
+  if(item.ratings.incomePerStudent) {
+    infoContent += createParagraph('Klassegrootte ' + item.ratings.incomePerStudent);
+  }
+
+  if(item.ratings.nonPersonelCostsPerStudent) {
+    infoContent += createParagraph('Klassegrootte ' + item.ratings.nonPersonelCostsPerStudent);
+  }
+
+  if(item.ratings.fteBoardPerFteTeacher) {
+    infoContent += createParagraph('Directie tegenpover leraren ' + item.ratings.fteBoardPerFteTeacher);
+  }
+
+  if(item.ratings.costsBoardPerCostsPersonel) {
+    infoContent += createParagraph('Kosten Directie tegenover leraren ' + item.ratings.costsBoardPerCostsPersonel);
+  }
+
+  if(item.ratings.citoPerClassSize) {
+    infoContent += createParagraph('Cite per Klasgrootte ' + item.ratings.citoPerClassSize);
+  }
 
   var infowindow = new google.maps.InfoWindow({
     content: infoContent
