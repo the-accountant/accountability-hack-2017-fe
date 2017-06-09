@@ -54,3 +54,7 @@ button {
     padding: 30px;
     height:100%;
 }
+
+#searchBox {
+    width: 200px;
+}
