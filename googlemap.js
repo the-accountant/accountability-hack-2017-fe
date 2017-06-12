@@ -13,7 +13,7 @@ processData([
     bevoegdGezag: 0,
     name: 'Frank Wijmans',
     address: {
-      streetName: 'Comeniusstraat',
+      streetname: 'Comeniusstraat',
       streetNr: '809/3',
       zipcode: '1065 CH',
       city: 'Amsterdam'
@@ -45,7 +45,7 @@ processData([
     address: {
       zipcode: '2511 CL',
       streetNr: '',
-      streetName: '',
+      streetname: '',
       city: ''
     },
     geo: {
@@ -58,7 +58,7 @@ processData([
     address: {
       zipcode: '3824 DK',
       streetNr: '',
-      streetName: '',
+      streetname: '',
       city: ''
     },
     geo: {
@@ -71,7 +71,7 @@ processData([
     address: {
       zipcode: '1223 GK',
       streetNr: '',
-      streetName: '',
+      streetname: '',
       city: ''
     },
     geo: {
@@ -84,7 +84,7 @@ processData([
     address: {
       zipcode: '1316 LG',
       streetNr: '',
-      streetName: '',
+      streetname: '',
       city: ''
     },
     geo: {
@@ -97,7 +97,7 @@ processData([
     address: {
       zipcode: '1087 MN',
       streetNr: '',
-      streetName: '',
+      streetname: '',
       city: ''
     },
     geo: {
@@ -129,8 +129,8 @@ function processData(rawData, callback) {
 }
 
 
-var url = 'http://818e3c4a.ngrok.io';
-var schoolResource = url + '/schools?start=1000&size=5000';
+var url = 'http://localhost:8080';
+var schoolResource = url + '/schools?start=0&size=5000';
 
 function fetchSchools() {
   var xhr = new XMLHttpRequest();
@@ -144,7 +144,9 @@ function fetchSchools() {
     }
   };
 }
-//fetchSchools();
+fetchSchools();
+
+var heatMapLayer;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -158,11 +160,11 @@ function initMap() {
     map: map
   });
 
-
   addMarkers(data);
   clearMarkers(document.getElementById('markerCheckbox'));
 
 }
+
 
 function addMarkers(markerData) {
   markerData.map(item => addMarker(item));
@@ -196,10 +198,14 @@ function addMarker(item) {
       return '';
     }
   };
-  var createParagraph = item => createElement(item, 'p');
+
   var createTableRow = item => createElement(item, 'tr');
   var createHeader = item => createElement(item, 'h1');
 
+
+  if (!item.name) {
+    item.name = 'School zonder Naam';
+  }
 
   var infoContent = '';
 
@@ -208,36 +214,36 @@ function addMarker(item) {
     infoContent += '<small> BRIN: ' + item.brin + '  </small>';
   }
   if (item.address) {
-    infoContent += '<p>' + item.address.streetName + ' ' + item.address.streetNr + '<br/>' + item.address.zipcode + '<br/>' + item.address.city;
+    infoContent += '<p>' + item.address.streetname + ' ' + item.address.streetNr + '<br/>' + item.address.zipcode + '<br/>' + item.address.city;
   }
 
   infoContent += "<table>";
-  if(item.ratings.classSize) {
-    infoContent += createTableRow('<td>Inkomen</td><td>€  ' + item.totalIncome+'</td>');
+  if (item.ratings.totalIncome) {
+    infoContent += createTableRow('<td>Inkomen</td><td>€  ' + item.totalIncome + '</td>');
   }
 
-  if(item.ratings.classSize) {
-    infoContent += createTableRow('<td>Klassegrootte </td><td>' + item.ratings.classSize+'</td>');
+  if (item.ratings.classSize) {
+    infoContent += createTableRow('<td>Klassegrootte </td><td>' + item.ratings.classSize + '</td>');
   }
 
-  if(item.ratings.incomePerStudent) {
-    infoContent += createTableRow('<td>Inkomen per leerling </td><td>' + item.ratings.incomePerStudent+'</td>');
+  if (item.ratings.incomePerStudent) {
+    infoContent += createTableRow('<td>Inkomen per leerling </td><td>' + item.ratings.incomePerStudent + '</td>');
   }
 
-  if(item.ratings.nonPersonelCostsPerStudent) {
-    infoContent += createTableRow('<td>Klassegrootte </td><td>' + item.ratings.nonPersonelCostsPerStudent+'</td>');
+  if (item.ratings.nonPersonelCostsPerStudent) {
+    infoContent += createTableRow('<td>Niet-persoonlijke kosten per leerling </td><td>' + item.ratings.nonPersonelCostsPerStudent + '</td>');
   }
 
-  if(item.ratings.fteBoardPerFteTeacher) {
-    infoContent += createTableRow('<td>Directie/leraren </td><td>' + item.ratings.fteBoardPerFteTeacher+'</td>');
+  if (item.ratings.fteBoardPerFteTeacher) {
+    infoContent += createTableRow('<td>Directie/leraren </td><td>' + item.ratings.fteBoardPerFteTeacher + '</td>');
   }
 
-  if(item.ratings.costsBoardPerCostsPersonel) {
-    infoContent += createTableRow('<td>Kosten Directie/leraren </td><td>' + item.ratings.costsBoardPerCostsPersonel+'</td>');
+  if (item.ratings.costsBoardPerCostsPersonel) {
+    infoContent += createTableRow('<td>Kosten Directie/leraren </td><td>' + item.ratings.costsBoardPerCostsPersonel + '</td>');
   }
 
-  if(item.ratings.citoPerClassSize) {
-    infoContent += createTableRow('<td>Cito per Klasgrootte </td><td>' + item.ratings.citoPerClassSize+'</td>');
+  if (item.ratings.citoPerClassSize) {
+    infoContent += createTableRow('<td>Cito per Klasgrootte </td><td>' + item.ratings.citoPerClassSize + '</td>');
   }
 
   infoContent += "</table>";
@@ -245,15 +251,11 @@ function addMarker(item) {
     content: infoContent
   });
 
-  var name = 'School';
-  if (item.name) {
-    name = item.name;
-  }
 
   var marker = new google.maps.Marker({
     position: new google.maps.LatLng(item.geo.latitude, item.geo.longitude),
     map: map,
-    title: name
+    title: getMarkerName(item)
   });
 
   marker.addListener('click', function () {
@@ -324,26 +326,53 @@ function changeGradient() {
 // Heatmap data: 500 Points
 function getPoints(pointData) {
   return pointData.map(item => {
-        var weight = 1;
-        if (item.ratings && item.ratings.classSize) {
-          weight = item.ratings.classSize;
-        }
         return {
           location: new google.maps.LatLng(item.geo.latitude, item.geo.longitude),
-          weight: weight
+          weight: getWeight(item)
         }
       }
   );
 }
 
+var ratingType = 'incomePerStudent';
+
+function getWeight(item) {
+  var weight = 1;
+  if (item.ratings && item.ratings['classSize']) {
+    weight = item.ratings[ratingType];
+  }
+  return weight;
+}
+
+function setRatingType(type) {
+  //console.log(type);
+  ratingType = type;
+  heatmap.setData(getPoints(data));
+}
+
 function findMarker() {
-  var searchValue = document.getElementById('searchBox').value;
-  data
-      .filter(item => item.name)
-      .map((item) => {
-        if (item.name && item.name.indexOf(searchValue) != -1) {
-          setMapOnMarker(map, item.name);
+  clearMarkers();
+  var searchValue = document.getElementById('searchBox').value.toLowerCase();
+  data.filter(item => item.name)
+      .forEach((item) => {
+        var searches = [];
+
+        if (item.name) {
+          searches.push(item.name.toLowerCase());
         }
+        if (item.address && item.address.city) {
+          searches.push(item.address.city.toLowerCase());
+        }
+
+        searches.map(value => {
+          if(value.indexOf(searchValue) != -1){
+            //console.log(searchValue, value, item);
+            setMapOnMarker(map, getMarkerName(item));
+          }
+        });
       });
 
 }
+ function getMarkerName(item){
+  return item.name + '-'+item.geo.latitude+','+item.geo.longitude;
+ }

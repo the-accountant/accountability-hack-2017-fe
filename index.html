@@ -30,7 +30,7 @@
     </p>
 
     <p>U kunt simpelweg zoeken op uw eigen school:</p>
-    <input value="" placeholder="Zoek op een basisschool" id="searchBox"> <button onclick="findMarker()">Zoek</button>
+    <input value="" placeholder="Zoek op een basisschool" id="searchBox"><button onclick="findMarker()">Zoek</button>
 
     <p>Graag gedaan,</p>
 
@@ -45,12 +45,12 @@
       </small>
     </p>
 
-    <button>Klasgrootte</button><br>
-    <button>Leerlingen per groep</button><br>
-    <button>Inkomen per leerling</button><br>
-    <button>Directie tegenover leraren</button><br>
-    <button>Kosten Directie tegenover leraren</button><br>
-    <button>Cito per Klasgrootte</button><br>
+    <button onclick="setRatingType('classSize')">Leerlingen per groep</button><br>
+    <button onclick="setRatingType('incomePerStudent')">Inkomen per leerling</button><br>
+    <button onclick="setRatingType('nonPersonelCostsPerStudent')">Niet-persoonlijke kosten per leering</button><br>
+    <button onclick="setRatingType('fteBoardPerFteTeacher')">Directie tegenover leraren</button><br>
+    <button onclick="setRatingType('costsBoardPerCostsPersonel')">Kosten Directie tegenover leraren</button><br>
+    <button onclick="setRatingType('citoPerClassSize')">Cito per Klasgrootte</button><br>
 
 
   </div>
